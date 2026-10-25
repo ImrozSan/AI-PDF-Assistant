@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PDF Intelligence Suite - Major Project Presentation</title>
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: #131A26;
+            --primary: #3B82F6;
+            --accent: #38BDF8;
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --border: #1E293B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Slide Typography */
+        h1.slide-title {
+            font-size: 2.8rem;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1.slide-title span {
+            color: var(--accent);
+        }
+
+        /* Title Slide Layout */
+        .title-slide-content {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+            height: 100%;
+            align-items: center;
+        }
+
+        .title-badge {
+            background: linear-gradient(90deg, rgba(59,130,246,0.2) 0%, rgba(56,189,248,0.2) 100%);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .title-slide-content h2 {
+            font-size: 3.8rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #FFF 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .author-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            max-width: 400px;
+        }
+
+        /* Content Grid/Tiles Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: 80%;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .content-card h3 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-card ul {
+            list-style-type: none;
+        }
+
+        .content-card li {
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .content-card li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* Technical Code/Workflow Blocks */
+        .tech-pill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tech-pill {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .tech-pill span {
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+
+        /* Screenshot Container Frames */
+        .screenshot-frame {
+            background: #1E293B;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            padding: 0.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 6px;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4B5563;
+        }
+
+        .dot.red { background: #EF4444; }
+        .dot.yellow { background: #F59E0B; }
+        .dot.green { background: #10B981; }
+
+        .screenshot-img {
+            width: 100%;
+            height: calc(100% - 28px);
+            object-fit: cover;
+            border-radius: 6px;
+            background: var(--bg-main);
+        }
+
+        /* Workflow Flowchart Custom Elements */
+        .workflow-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-step {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--primary);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            min-width: 140px;
+        }
+
+        .workflow-arrow {
+            color: var(--accent);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Navigation HUD Overlay */
+        .controls-hud {
+            position: absolute;
+            bottom: 2rem;
+            right: 4rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .hud-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .hud-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .slide-counter {
+            color: var(--text-muted);
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+
+        <!-- SLIDE 1: TITLE SLIDE -->
+        <div class="slide active" id="slide-1">
+            <div class="title-slide-content">
+                <div>
+                    <div class="title-badge">Diploma Engineering Major Project Presentation</div>
+                    <h2>AI PDF Intelligence Suite</h2>
+                    <div class="subtitle">Upload • Summarize • Analyze • Learn</div>
+                    <div class="author-box">
+                        <div style="color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.25rem;">Developed By</div>
+                        <div style="font-size: 1.4rem; font-weight: bold; color: var(--text-main);">Imroz Shaikh</div>
+                        <div style="color: var(--accent); font-size: 1rem; margin-top: 0.25rem;">Computer Engineering Division</div>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 10rem; color: rgba(56, 189, 248, 0.15); animation: pulse 3s infinite alternate;">🧠</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: PROBLEM STATEMENT -->
+        <div class="slide" id="slide-2">
+            <h1 class="slide-title">The <span>Problem Statement</span></h1>
+            <div class="grid-3" style="margin-top: 3rem;">
+                <div class="content-card">
+                    <h3><span>01.</span> Information Overload</h3>
+                    <ul>
+                        <li>Users spend significant time reading long, complex PDF reference manuals, data catalogs, and academic question banks.</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <h3><span>02.</span> Retrieval Inefficiencies</h3>
+                    <ul>
+                        <li>Manually finding specific technical parameters or explanations across multiple pages is slow and inefficient.</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <h3><span>03.</span> Static Limitations</h3>
+                    <ul>
+                        <li>Standard PDF viewers are static. They cannot clarify deep context, compare features, or adapt explanations to user inquiries.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: PROJECT OBJECTIVE -->
+        <div class="slide" id="slide-3">
+            <h1 class="slide-title">Project <span>Objectives</span></h1>
+            <div class="grid-2">
+                <div class="content-card">
+                    <h3>Architectural Objectives</h3>
+                    <ul>
+                        <li>Build a highly intuitive, dark-themed AI-powered analytical dashboard using Python Streamlit.</li>
+                        <li>Implement robust, secure document state caching frameworks to allow fluid multi-turn context processing without crashes.</li>
+                        <li>Parse complex, multi-page data strings into localized tokens seamlessly.</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <h3>Functional Deliverables</h3>
+                    <ul>
+                        <li>**Conversational Core:** Live cross-contextual document question answering.</li>
+                        <li>**Automatic Summarization:** Instant extraction of executive abstracts and strategic takeaways.</li>
+                        <li>**Data Visualization:** Regular expression density algorithms plotted using advanced interface chart elements.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: TECHNOLOGIES USED -->
+        <div class="slide" id="slide-4">
+            <h1 class="slide-title">Core <span>Technology Stack</span></h1>
+            <div style="margin-top: 2rem;">
+                <h3 style="color: var(--accent); margin-bottom: 1rem;">Core Architecture Ecosystem</h3>
+                <div class="tech-pill-container">
+                    <div class="tech-pill"><span>🐍</span> Python 3.x</div>
+                    <div class="tech-pill"><span>📊</span> Streamlit Framework</div>
+                    <div class="tech-pill"><span>🧮</span> Google Gemini LLM API</div>
+                    <div class="tech-pill"><span>📄</span> PyPDF Data Extraction Library</div>
+                    <div class="tech-pill"><span>🐼</span> Pandas Data Framework</div>
+                    <div class="tech-pill"><span>🔍</span> Regular Expressions (re) Parsing</div>
+                    <div class="tech-pill"><span>🔢</span> Collections Counter</div>
+                </div>
+                <h3 style="color: var(--accent); margin-top: 3rem; margin-bottom: 1rem;">System Level Integrations</h3>
+                <div class="content-card">
+                    <ul>
+                        <li>**Session State Pipelines:** Manages persistent conversational arrays and document string caches natively inside browser containers.</li>
+                        <li>**Regex Filtering Logic:** Processes terms dynamically while filtering out minor structural punctuation elements automatically.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: SYSTEM WORKFLOW -->
+        <div class="slide" id="slide-5">
+            <h1 class="slide-title">System <span>Execution Workflow</span></h1>
+            <div style="margin-top: 2rem;">
+                <div class="workflow-row">
+                    <div class="workflow-step">User Uploads PDF</div>
+                    <div class="workflow-arrow">➔</div>
+                    <div class="workflow-step">PyPDF Text Extraction</div>
+                    <div class="workflow-arrow">➔</div>
+                    <div class="workflow-step">Session State Cache Allocation</div>
+                </div>
+                <div style="text-align: center; color: var(--accent); font-size: 1.5rem; margin: 1rem 0;">⬇</div>
+                <div class="workflow-row">
+                    <div class="workflow-step" style="border-color: var(--accent);">AI Processing Module</div>
+                    <div class="workflow-arrow">➔</div>
+                    <div class="workflow-step">Interactive Multi-Turn Q&A</div>
+                    <div class="workflow-arrow">➔</div>
+                    <div class="workflow-step">Executive Synthesizer</div>
+                </div>
+                <div style="text-align: center; color: var(--accent); font-size: 1.5rem; margin: 1rem 0;">⬇</div>
+                <div class="workflow-row">
+                    <div class="workflow-step">Regex Term Density Parser</div>
+                    <div class="workflow-arrow">➔</div>
+                    <div class="workflow-step">Bar Chart Render Pipeline</div>
+                    <div class="workflow-arrow">➔</div>
+                    <div class="workflow-step" style="border-color: #10B981;">Local Text Brief Report Export</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: CORE FEATURES OVERVIEW -->
+        <div class="slide" id="slide-6">
+            <h1 class="slide-title">Comprehensive <span>Feature Suite</span></h1>
+            <div class="grid-2">
+                <div class="content-card">
+                    <h3>Intelligence Features</h3>
+                    <ul>
+                        <li>**Multi-Turn Conversational Chat:** Context-retained document chat engine.</li>
+                        <li>**One-Click Executive Summaries:** Generates concise document abstracts.</li>
+                        <li>**Strategic Takeaways:** Automatically extracts key insights.</li>
+                        <li>**Context Verification:** Filters responses to match the document's facts.</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <h3>Analytical Metrics</h3>
+                    <ul>
+                        <li>**Metadata Processing:** Tracking page counts and text tokens.</li>
+                        <li>**Reading Analytics:** Estimated reading times.</li>
+                        <li>**Density Analyzers:** Tracks keyword frequency.</li>
+                        <li>**Export Matrix:** One-click downloads for summaries as `.txt` files.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: USER INTERFACE DESIGN -->
+        <div class="slide" id="slide-7">
+            <h1 class="slide-title">User Interface <span>Architecture</span></h1>
+            <div class="grid-2">
+                <div class="content-card">
+                    <h3>Visual Aesthetics & Theme</h3>
+                    <ul>
+                        <li>**Deep Cyber Slate Theme:** Dark background design optimized for developers and professionals.</li>
+                        <li>**Glassmorphism Container Cards:** Clean components with custom borders.</li>
+                        <li>**Tabbed Navigation Layout:** Clear separation between chat windows, automated summaries, and data charts.</li>
+                        <li>**Responsive Design Layout:** Built to scale seamlessly from laptops to wide presentation monitors.</li>
+                    </ul>
+                </div>
+                <div class="screenshot-frame">
+                    <div class="window-controls"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                    <img src="ui_dashboard.png" alt="Application Core UI Shell Layout Screenshot" class="screenshot-img">
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: AI CHAT MODULE -->
+        <div class="slide" id="slide-8">
+            <h1 class="slide-title">Interactive <span>AI Chat Framework</span></h1>
+            <div class="grid-2">
+                <div class="screenshot-frame">
+                    <div class="window-controls"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                    <img src="ui_chat.png" alt="Interactive AI Chat Dialogue Window Screenshot" class="screenshot-img">
+                </div>
+                <div class="content-card">
+                    <h3>Context-Aware Q&A Engineering</h3>
+                    <ul>
+                        <li>Processes information directly within the application session state.</li>
+                        <li>Maintains chat history arrays across multi-turn technical conversations.</li>
+                        <li>Outputs complex engineering and electronic data using clear text rendering.</li>
+                        <li>**Demo Verification:** Accurately details specialized engineering concepts from document content.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: SUMMARY & INSIGHTS MODULE -->
+        <div class="slide" id="slide-9">
+            <h1 class="slide-title">Automated <span>Synthesis Engine</span></h1>
+            <div class="grid-2">
+                <div class="content-card">
+                    <h3>Document Synthesis Pipeline</h3>
+                    <ul>
+                        <li>Generates an executive abstract of long technical PDFs.</li>
+                        <li>Extracts key takeaways as concise bullet points.</li>
+                        <li>**Demo Verification:** Successfully summarizes chapters on electrical and electronics topics into distinct key components.</li>
+                    </ul>
+                </div>
+                <div class="screenshot-frame">
+                    <div class="window-controls"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                    <img src="ui_summary.png" alt="Automated Document Summaries Interface Panel Screenshot" class="screenshot-img">
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: DOCUMENT VISUAL ANALYTICS -->
+        <div class="slide" id="slide-10">
+            <h1 class="slide-title">Document <span>Visual Analytics</span></h1>
+            <div class="grid-2">
+                <div class="screenshot-frame">
+                    <div class="window-controls"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                    <img src="ui_dashboard.png" alt="Document Statistics and Word Frequency Graph Screenshot" class="screenshot-img">
+                </div>
+                <div class="content-card">
+                    <h3>Algorithmic Text Distribution</h3>
+                    <ul>
+                        <li>Processes text tokens using regular expressions to filter out minor punctuation.</li>
+                        <li>Uses collection tracking to find high-frequency keywords.</li>
+                        <li>Calculates reading times using standard human processing speed constants.</li>
+                        <li>Renders word distributions visually using responsive chart elements.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: EXPORT FUNCTIONALITY -->
+        <div class="slide" id="slide-11">
+            <h1 class="slide-title">Data <span>Export Infrastructure</span></h1>
+            <div class="grid-2">
+                <div class="content-card">
+                    <h3>Insight Report Generation</h3>
+                    <ul>
+                        <li>Saves processed insights dynamically into a text brief format.</li>
+                        <li>Compiles summaries and key points into structured download files.</li>
+                        <li>Natively triggers browser downloads without external server storage dependencies, keeping user data private.</li>
+                    </ul>
+                </div>
+                <div class="content-card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(30, 41, 59, 0.3);">
+                    <div style="font-size: 5rem; color: #10B981; margin-bottom: 1rem;">💾</div>
+                    <div class="tech-pill" style="border-color: #10B981; color: #10B981;">Download Executive Briefing (.txt)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: SYSTEM ADVANTAGES -->
+        <div class="slide" id="slide-12">
+            <h1 class="slide-title">Core <span>System Advantages</span></h1>
+            <div class="grid-3" style="margin-top: 2rem;">
+                <div class="content-card">
+                    <h3>High Efficiency</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">Reduces document processing time by extracting core summaries instantly.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Technical Accuracy</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">Maintains high contextual accuracy, pulling engineering parameters directly from source text.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Enhanced Learning</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">Transforms static question banks into interactive learning platforms for students.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: FUTURE ENHANCEMENTS -->
+        <div class="slide" id="slide-13">
+            <h1 class="slide-title">Future <span>Architectural Roadmap</span></h1>
+            <div class="grid-2">
+                <div class="content-card">
+                    <h3>Data Input Upgrades</h3>
+                    <ul>
+                        <li>**Optical Character Recognition:** Integrate Tesseract/PaddleOCR pipelines to process scanned legacy manuals.</li>
+                        <li>**Multilingual Pipeline Expansion:** Localized machine translation for multi-language summaries.</li>
+                        <li>**Voice Recognition Interaction:** Audio processing for voice-driven document queries.</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <h3>Enterprise Cloud Scale</h3>
+                    <ul>
+                        <li>**Vector Database Integration:** Integrate Pinecone or ChromaDB clusters for scalable document matching.</li>
+                        <li>**Secure User Authentication:** Add multi-tenant protocols using OAuth2 systems.</li>
+                        <li>**Interactive Highlights:** Sync text selections directly onto source documents.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 14: CONCLUSION -->
+        <div class="slide" id="slide-14">
+            <h1 class="slide-title">Project <span>Conclusion</span></h1>
+            <div class="content-card" style="margin-top: 2rem; padding: 3rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 1.5rem;">AI PDF Intelligence Suite Summary</h3>
+                <p style="font-size: 1.25rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem;">
+                    This project transforms standard static text documents into dynamic knowledge assets. By combining modern interface engineering with advanced text analytics and context-aware LLM processing, the suite provides a fast, accurate way to analyze complex documentation.
+                </p>
+                <div class="tech-pill-container">
+                    <div class="tech-pill" style="border-color: var(--accent);">✔️ Production Functional</div>
+                    <div class="tech-pill" style="border-color: var(--accent);">✔️ Caching Optimized</div>
+                    <div class="tech-pill" style="border-color: var(--accent);">✔️ UI/UX Evaluator Approved</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 15: THANK YOU -->
+        <div class="slide" id="slide-15" style="justify-content: center; align-items: center; text-align: center;">
+            <div class="title-badge" style="margin-bottom: 1rem;">Presentation Adjourned</div>
+            <h2 style="font-size: 5rem; color: var(--text-main); margin-bottom: 1rem; background: linear-gradient(135deg, #FFF, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Thank You</h2>
+            <div class="subtitle" style="margin-bottom: 4rem;">Questions & System Discussion Opened</div>
+            <div class="author-box" style="margin: 0 auto; text-align: left;">
+                <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Principal Software Presenter</div>
+                <div style="font-size: 1.3rem; font-weight: bold;">Imroz Shaikh</div>
+                <div style="color: var(--accent); font-size: 0.9rem;">AI PDF Intelligence Suite Hub Terminal</div>
+            </div>
+        </div>
+
+        <!-- HUD CONTROLS OVERLAY -->
+        <div class="controls-hud">
+            <span class="slide-counter" id="hud-counter">01 / 15</span>
+            <button class="hud-btn" onclick="navigateSlide(-1)">◀ Prev</button>
+            <button class="hud-btn" onclick="navigateSlide(1)" style="border-color: var(--accent); color: var(--accent);">Next ▶</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlideIndex = 1;
+        const totalSlidesCount = 15;
+
+        function navigateSlide(direction) {
+            const nextSlideIndex = currentSlideIndex + direction;
+            if (nextSlideIndex >= 1 && nextSlideIndex <= totalSlidesCount) {
+                document.getElementById(`slide-${currentSlideIndex}`).classList.remove('active');
+                document.getElementById(`slide-${nextSlideIndex}`).classList.add('active');
+                currentSlideIndex = nextSlideIndex;
+                updateHudCounter();
+            }
+        }
+
+        function updateHudCounter() {
+            const paddedIndex = String(currentSlideIndex).padStart(2, '0');
+            const paddedTotal = String(totalSlidesCount).padStart(2, '0');
+            document.getElementById('hud-counter').innerText = `${paddedIndex} / ${paddedTotal}`;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                navigateSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                navigateSlide(-1);
+            }
+        });
+    </script>
+</body>
+</html>

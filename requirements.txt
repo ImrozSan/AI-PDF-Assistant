@@ -1,0 +1,10 @@
+streamlit
+pypdf
+python-dotenv
+requests
+langchain
+faiss-cpu
+sentence-transformers
+transformers
+torch
+huggingface_hub
